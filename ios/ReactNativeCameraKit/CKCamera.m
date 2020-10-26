@@ -189,14 +189,14 @@ RCT_ENUM_CONVERTER(CKCameraZoomMode, (@{
         self.previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
         [self.layer addSublayer:self.previewLayer];
         self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        
+
 #if (TARGET_IPHONE_SIMULATOR)
         // Create mock camera layer. When a photo is taken, we capture this layer and save it in place of a
         // hardware input.
         self.mockPreview = [[CKMockPreview alloc] initWithFrame:CGRectZero];
         [self addSubview:self.mockPreview];
 #endif
-        
+
         UIView *focusView = [[UIView alloc] initWithFrame:CGRectZero];
         focusView.backgroundColor = [UIColor clearColor];
         focusView.layer.borderColor = [UIColor yellowColor].CGColor;
@@ -365,7 +365,7 @@ RCT_ENUM_CONVERTER(CKCameraZoomMode, (@{
 
 -(void)reactSetFrame:(CGRect)frame {
     [super reactSetFrame:frame];
-    
+
     self.previewLayer.frame = self.bounds;
 
 #if TARGET_IPHONE_SIMULATOR
@@ -501,12 +501,12 @@ RCT_ENUM_CONVERTER(CKCameraZoomMode, (@{
 
 
 - (void)snapStillImage:(NSDictionary*)options success:(CaptureBlock)onSuccess onError:(void (^)(NSString*))onError {
-    
+
     #if TARGET_IPHONE_SIMULATOR
     [self capturePreviewLayer:options success:onSuccess onError:onError];
     return;
     #endif
-    
+
     dispatch_async( self.sessionQueue, ^{
         AVCaptureConnection *connection = [self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
 
@@ -541,7 +541,7 @@ RCT_ENUM_CONVERTER(CKCameraZoomMode, (@{
 
             // The sample buffer is not retained. Create image data before saving the still image to the photo library asynchronously.
             NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-            
+
             [self writeCapturedImageData:imageData onSuccess:onSuccess onError:onError];
             [self resetFocus];
         }];
@@ -945,13 +945,13 @@ RCT_ENUM_CONVERTER(CKCameraZoomMode, (@{
         self.dataReadingFrame = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frameWidth, self.heightFrame)]; //
         self.dataReadingFrame.center = self.center;
         self.dataReadingFrame.backgroundColor = [UIColor clearColor];
-        [self createCustomFramesForView:self.dataReadingFrame];
-        [self addSubview:self.dataReadingFrame];
+//        [self createCustomFramesForView:self.dataReadingFrame];
+//        [self addSubview:self.dataReadingFrame];
 
 
-        [self startAnimatingScanner:self.dataReadingFrame];
+//        [self startAnimatingScanner:self.dataReadingFrame];
 
-        [self addVisualEffects:self.dataReadingFrame.frame];
+//        [self addVisualEffects:self.dataReadingFrame.frame];
 
         CGRect visibleRect = [self.previewLayer metadataOutputRectOfInterestForRect:self.dataReadingFrame.frame];
         self.metadataOutput.rectOfInterest = visibleRect;
@@ -1232,4 +1232,3 @@ const NSString *isNeedMultipleScanBarcode = @"isNeedMultipleScanBarcode";
 
 
 @end
-

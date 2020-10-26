@@ -7,6 +7,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.hardware.Camera;
 
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.rncamerakit.Utils;
@@ -20,6 +21,7 @@ public class CameraView extends FrameLayout implements SurfaceHolder.Callback {
     private boolean showFrame;
     private Rect frameRect;
     private BarcodeFrame barcodeFrame;
+
     @ColorInt private int frameColor = Color.GREEN;
     @ColorInt private int laserColor = Color.RED;
 
@@ -29,6 +31,21 @@ public class CameraView extends FrameLayout implements SurfaceHolder.Callback {
         setBackgroundColor(Color.BLACK);
         addView(surface, MATCH_PARENT, MATCH_PARENT);
         surface.getHolder().addCallback(this);
+        surface.setOnClickListener(new OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  if (CameraViewManager.getCamera() != null) {
+                      try {
+                          CameraViewManager.getCamera().autoFocus(new Camera.AutoFocusCallback() {
+                              @Override
+                              public void onAutoFocus(boolean success, Camera camera) {
+                              }
+                          });
+                      } catch (Exception e) {
+                       }
+                  }
+              }
+          });
     }
 
     @Override
@@ -55,6 +72,11 @@ public class CameraView extends FrameLayout implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         CameraViewManager.removeCameraView();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
 
@@ -85,8 +107,8 @@ public class CameraView extends FrameLayout implements SurfaceHolder.Callback {
     public void showFrame() {
         if (showFrame) {
             barcodeFrame = new BarcodeFrame(getContext());
-            barcodeFrame.setFrameColor(frameColor);
-            barcodeFrame.setLaserColor(laserColor);
+            // barcodeFrame.setFrameColor(frameColor);
+            // barcodeFrame.setLaserColor(laserColor);
             addView(barcodeFrame);
             requestLayout();
         }

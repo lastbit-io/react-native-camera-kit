@@ -72,10 +72,10 @@ public class BarcodeFrame extends View {
     protected void onDraw(Canvas canvas) {
         long timeElapsed = (System.currentTimeMillis() - previousFrameTime);
         super.onDraw(canvas);
-        canvas.drawRect(0, 0, width, height, dimPaint);
-        canvas.drawRect(frameRect, framePaint);
-        drawBorder(canvas);
-        drawLaser(canvas, timeElapsed);
+        // canvas.drawRect(0, 0, width, height, dimPaint);
+        // canvas.drawRect(frameRect, framePaint);
+        // drawBorder(canvas);
+        // drawLaser(canvas, timeElapsed);
         previousFrameTime = System.currentTimeMillis();
         this.invalidate(frameRect);
     }
