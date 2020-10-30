@@ -64,8 +64,8 @@ public class CameraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void requestDeviceCameraAuthorization(Promise promise) {
-        cameraPermission.requestAccess(getCurrentActivity(), promise);
+    public void requestDeviceCameraAuthorization(String rationals, Promise promise) {
+        cameraPermission.requestAccess(getCurrentActivity(), promise, rationals);
     }
 
     @ReactMethod

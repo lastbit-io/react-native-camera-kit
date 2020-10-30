@@ -18,8 +18,28 @@ export default class CameraKitCamera extends React.Component {
     console.log('flashMode?', await NativeCameraModule.getFlashMode());
   }
 
-  static async requestDeviceCameraAuthorization() {
-    return await NativeCameraModule.requestDeviceCameraAuthorization();
+  /**
+   *
+   * @param {
+    shouldShowAlert: '0|1', // '1' will show alert
+    title: '', // Permission alert title
+    message: '', // Permission alert message
+    button_text: '' // Permission alert button text
+  } rational
+   */
+  static async requestDeviceCameraAuthorization(rational = {
+    shouldShowAlert: '0',
+    title: '',
+    message: '',
+    button_text: ''
+  }) {
+    const androidDialogValues = Object.values(rational).reduce((prev, curr, index) => {
+      if(index === 0) {
+        return `${curr}`
+      }
+      return `${prev},${curr}`
+    }, '')
+    return await NativeCameraModule.requestDeviceCameraAuthorization(androidDialogValues);
   }
 
   async capture(saveToCameraRoll = true) {

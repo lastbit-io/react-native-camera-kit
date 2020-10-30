@@ -2,6 +2,9 @@ package com.rncamerakit.camera.permission;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import java.util.Arrays;
+import android.content.DialogInterface;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
 
@@ -16,15 +19,40 @@ public class CameraPermission {
 
     private Promise requestAccessPromise;
 
-    public void requestAccess(Activity activity, Promise promise) {
+    public void requestAccess(final Activity activity, Promise promise, String rationals) {
         if (isPermissionGranted(activity)) {
             promise.resolve(true);
         }
         requestAccessPromise = promise;
-        permissionRequested(activity, Manifest.permission.CAMERA);
-        ActivityCompat.requestPermissions(activity,
-                new String[]{Manifest.permission.CAMERA},
-                CAMERA_PERMISSION_REQUEST_CODE);
+
+        String[] keys = null;
+        if (rationals != null && rationals.length() > 0) {
+            keys = rationals.split(",");
+        }
+
+        if(keys.length == 4 && "1".equals(keys[0])) {
+           AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
+           alertBuilder.setCancelable(true);
+           alertBuilder.setTitle(keys[1]);
+           alertBuilder.setMessage(keys[2]);
+           alertBuilder.setPositiveButton(keys[3], new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+                   permissionRequested(activity, Manifest.permission.CAMERA);
+                      ActivityCompat.requestPermissions(activity,
+                      new String[]{Manifest.permission.CAMERA},
+                     CAMERA_PERMISSION_REQUEST_CODE);
+               }
+        });
+           AlertDialog alert = alertBuilder.create();
+           alert.show();
+        } else {
+            permissionRequested(activity, Manifest.permission.CAMERA);
+            ActivityCompat.requestPermissions(activity,
+            new String[]{Manifest.permission.CAMERA},
+            CAMERA_PERMISSION_REQUEST_CODE);
+        }
+
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
