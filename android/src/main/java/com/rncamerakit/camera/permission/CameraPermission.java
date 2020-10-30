@@ -32,7 +32,7 @@ public class CameraPermission {
 
         if(keys.length == 4 && "1".equals(keys[0])) {
            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
-           alertBuilder.setCancelable(true);
+           alertBuilder.setCancelable(false);
            alertBuilder.setTitle(keys[1]);
            alertBuilder.setMessage(keys[2]);
            alertBuilder.setPositiveButton(keys[3], new DialogInterface.OnClickListener() {
@@ -45,6 +45,7 @@ public class CameraPermission {
                }
         });
            AlertDialog alert = alertBuilder.create();
+           alert.setCanceledOnTouchOutside(false);
            alert.show();
         } else {
             permissionRequested(activity, Manifest.permission.CAMERA);
